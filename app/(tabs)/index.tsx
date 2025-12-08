@@ -1,26 +1,26 @@
 import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
-import { ActivityIndicator, Image,ScrollView,Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import useFetch from "@/services/usefetch";
 import { fetchMovies } from "@/services/api";
- 
+
 export default function Index() {
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     data: movies,
     loading: moviesLoading,
-    error: moviesError
+    error: moviesError,
   } = useFetch(() =>
     fetchMovies({
       query: "",
     })
-  )
+  );
 
   return (
-    <View className="flex-1 bg-primary ">
+    <View className="flex-1 bg-primary">
       <Image source={images.bg} className="absolute w-full z-0" />
 
       <ScrollView
@@ -43,22 +43,37 @@ export default function Index() {
           <Text>Error: {moviesError?.message}</Text>
         ) : (
           
-            <View className="flex-1 mt-5 ">
+            <View className="flex-1 mt-5">
               <SearchBar
                 onPress={() => router.push("/search")}
                 placeholder="Search for a Movie"
               />
             
-
-            <>
+           <>
             <Text className="text-lg text-white font-bold mt-5 mb-3">
               Latest Movie
             </Text>
-            </>
-            </View>
-          
+            <FlatList
+                data={movies}
+                renderItem={({ item }) => (
+                  <Text className="text-white text-sm">{item.title}</Text>
+                )}
+                keyExtractor={(item)=>item.id.toString()}
+                numColumns={3}
+                columnWrapperStyle={{
+                  justifyContent: 'flex-start',
+                  gap:20,
+                  paddingRight:5,
+                  marginBottom:10
+
+                }}
+                className="mt-2 pb-32"
+                scrollEnabled={false}
+              />
+          </>
+          </View>
         )}
       </ScrollView>
     </View>
-  )
+  );
 }
