@@ -18,9 +18,9 @@ const useFetch = <T>(
 
             setData(result)
         } catch (err) {
-            // @ts-ignore
-            setError(err instanceof Erorr ? err :  new Error('An error occurred') );
-        } finally{
+  setError(err instanceof Error ? err : new Error("An error occurred"));
+}
+ finally{
             setLoading(false)
         }
     } 
