@@ -16,7 +16,7 @@ export default function Index() {
     error: moviesError,
   } = useFetch(() =>
     fetchMovies({
-      query: '',
+      query: 'n',
     })
   );
 
